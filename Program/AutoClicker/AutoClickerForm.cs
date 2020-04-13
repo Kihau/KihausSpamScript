@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Kihson_s_Spam_Script.AutoClicker
+namespace KihsonsBot.AutoClicker
 {
     public partial class AutoClickerForm : Form
     {
@@ -23,7 +23,7 @@ namespace Kihson_s_Spam_Script.AutoClicker
         private void AutoClickerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Hide();
-            var spambot = new SpamScriptForm();
+            var spambot = new SpamScript.SpamScriptForm();
             spambot.Closed += (s, args) => this.Close();
             spambot.Show();
         }

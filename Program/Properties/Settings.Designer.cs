@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kihson_s_Spam_Script.Properties
+namespace KihsonsBot.Properties
 {
 
 

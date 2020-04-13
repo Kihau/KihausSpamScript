@@ -170,6 +170,21 @@
     <Compile Include="AutoClicker\AutoClickerForm.Designer.cs">
       <DependentUpon>AutoClickerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MenuBarForms\AboutProgramForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuBarForms\AboutProgramForm.Designer.cs">
+      <DependentUpon>AboutProgramForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MenuBarForms\HelpForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MenuBarForms\HelpForm.Designer.cs">
+      <DependentUpon>HelpForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SpamScript\MenuStripMethods.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SpamScript\SpamScriptFormMethods.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,6 +205,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AutoClicker\AutoClickerForm.resx">
       <DependentUpon>AutoClickerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuBarForms\AboutProgramForm.aa.resx">
+      <DependentUpon>AboutProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuBarForms\AboutProgramForm.resx">
+      <DependentUpon>AboutProgramForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MenuBarForms\HelpForm.resx">
+      <DependentUpon>HelpForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SpamScript\SpamScriptForm.resx">
       <DependentUpon>SpamScriptForm.cs</DependentUpon>
@@ -226,7 +250,6 @@
     <Content Include="feelsgoodman_2sR_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MenuBarForms\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

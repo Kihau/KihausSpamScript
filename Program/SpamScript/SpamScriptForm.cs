@@ -1,16 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
-using System.Threading;
 
-namespace Kihson_s_Spam_Script
+namespace KihsonsBot.SpamScript
 {
     public partial class SpamScriptForm : Form
     {
@@ -28,47 +19,35 @@ namespace Kihson_s_Spam_Script
         private LanguageManager lang;
         private ListManager lists;
 
-        private static bool Paused { get; set; }
-        private static bool Working { get; set; }
-        private bool MBoxState { get; set; } 
+        private static bool IsPaused { get; set; }
+        private static bool IsRunning { get; set; }
+        private bool MBoxState { get; set; }
 
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            if (lists.threadList.Count != 0 && !Working)
+            if (lists.threadList.Count != 0 && !IsRunning)
             {
-                Working = true;
+                IsRunning = true;
                 GetReadyToSpam();
-                for (int i = 0; i < lists.threadList.Count; i++)
-                {
-                    Thread.Sleep(lists.spamList[i].Delay);
-                    lists.threadList[i].Start();
-                }
+                StartThreads();
             }
-            // Gdy program działa nie ustawiać messageboxów (bot może przypadkowo je klikać przez metodę SendKey.SendWait("{Enter}"))
-            else if (!Working) ShowMessageBox(lang[LanguageManager.Names.MBNoThreads]);
+            else if (!IsRunning) ShowMessageBox(lang[LanguageManager.Names.MBNoThreads]);
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            if (Working)
+            if (IsRunning)
             {
-
-                foreach (Thread thread in lists.threadList)
-                {
-                    if (Paused) thread.Resume();
-                    thread.Abort();
-                }
-
-                Working = Paused = false;
-                lists.ClearAll();
+                StopThreads();
                 ClearMessageBoxes();
+                IsRunning = IsPaused = false;
             }
             else ShowMessageBox(lang[LanguageManager.Names.MBNoThreads]);
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            if (textBoxSpamMessage.Text != "" && !Working)
+            if (textBoxSpamMessage.Text != "" && !IsRunning)
             {
                 try
                 {
@@ -81,39 +60,40 @@ namespace Kihson_s_Spam_Script
                 ClearMessageBoxes();
             }
             // Gdy program działa nie ustawiać messageboxów (bot może przypadkowo je klikać przez metodę SendKey.SendWait("{Enter}"))
-            else if (!Working) ShowMessageBox(lang[LanguageManager.Names.MBMissingData]);
+            else if (!IsRunning) ShowMessageBox(lang[LanguageManager.Names.MBMissingData]);
         }
 
         private void buttonPause_Click(object sender, EventArgs e)
         {
-            if (Working)
+            if (IsRunning)
             {
-                if (!Paused)
+                if (!IsPaused)
                     PauseThreads();
                 else
                 {
                     GetReadyToSpam();
+                    UpdateTitle();
                     ResumeThreads();
                 }
-                Paused = !Paused;
+                IsPaused = !IsPaused;
             }
         }
 
         private void buttonListRemove_Click(object sender, EventArgs e)
         {
-            if (listBoxThreads.SelectedIndex != -1 && (Paused || !Working))
+            if (listBoxThreads.SelectedIndex != -1 && (IsPaused || !IsRunning))
                 RemoveSelectedInListBox();
-            else if (Working && !Paused)
+            else if (IsRunning && !IsPaused)
                 ShowMessageBox(lang[LanguageManager.Names.MBBotActiveError]);
             else ShowMessageBox(lang[LanguageManager.Names.MBListSelectError]);
         }
 
         private void buttonListEdit_Click(object sender, EventArgs e)
         {
-            if (listBoxThreads.SelectedItems.Count == 1 && (Paused || !Working))
+            if (listBoxThreads.SelectedItems.Count == 1 && (IsPaused || !IsRunning))
             {
                 BotUpdater.Stop();
-                ListBoxEditorForm editWindow = new ListBoxEditorForm(lists, Working, lang);
+                ListBoxEditorForm editWindow = new ListBoxEditorForm(lists, IsRunning, lang);
                 editWindow.ShowDialog();
                 BotUpdater.Start();
             }
@@ -122,41 +102,19 @@ namespace Kihson_s_Spam_Script
             else ShowMessageBox(lang[LanguageManager.Names.MBBotActiveError]);
         }
 
+        private void checkBoxDeleteFinalised_CheckedChanged(object sender, EventArgs e)
+        {
+            lists.RemoveFinalised = !lists.RemoveFinalised;
+        }
+
         private void BotUpdater_Tick(object sender, EventArgs e)
         {
-            UpdateComponents();
+            if (IsRunning)
+            {
+                UpdateProgramState();
+                UpdateListBox();
+            }
             UpdateTitle();
-        }
-
-        // Add to some sort of a MenuBarManager
-        private void MBOnToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MBoxState = true;
-        }
-
-        private void MBOffToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MBoxState = false;
-        }
-
-        private void LangENToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            lang = new English();
-            UpdateLanguage();
-        }
-
-        private void LangPLToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            lang = new Polish();
-            UpdateLanguage();
-        }
-
-        private void AutoClickerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            var clicker = new AutoClicker.AutoClickerForm();
-            clicker.Closed += (s, args) => this.Close();
-            clicker.Show();
         }
     }
 }

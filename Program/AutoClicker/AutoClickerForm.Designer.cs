@@ -1,4 +1,4 @@
-﻿namespace Kihson_s_Spam_Script.AutoClicker
+﻿namespace KihsonsBot.AutoClicker
 {
     partial class AutoClickerForm
     {

@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Diagnostics;
+﻿using System.Windows.Forms;
 using System.Threading;
 
-namespace Kihson_s_Spam_Script
+namespace KihsonsBot.SpamScript
 {
     public partial class SpamScriptForm
     {
@@ -36,6 +27,8 @@ namespace Kihson_s_Spam_Script
             this.thread_label.Text = lang[LanguageManager.Names.LabelThreads];
 
             this.ThreadsToolStripMenuItem.Text = lang[LanguageManager.Names.MenuThreads];
+            this.SaveToolStripMenuItem.Text = lang[LanguageManager.Names.MenuSave];
+            this.LoadToolStripMenuItem.Text = lang[LanguageManager.Names.MenuLoad];
 
             this.OptionsToolStripMenuItem.Text = lang[LanguageManager.Names.MenuOptions];
             this.LanguagesToolStripMenuItem.Text = lang[LanguageManager.Names.MenuLanguages];
@@ -53,6 +46,31 @@ namespace Kihson_s_Spam_Script
             {
                 MessageBox.Show(text, lang[LanguageManager.Names.MBTitle], MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void StartThreads()
+        {
+            for (int i = 0; i < lists.threadList.Count; i++)
+            {
+                UpdateTitle();
+                Thread.Sleep(lists.spamList[i].Delay);
+                lists.threadList[i].Start();
+            }
+        }
+
+        private void StopThreads()
+        {
+            // Stopping threads
+            foreach (Thread thread in lists.threadList)
+            {
+                if (IsPaused) thread.Resume();
+                thread.Abort();
+            }
+
+            // Removing / readding threads
+            if (lists.RemoveFinalised) lists.ClearAll();
+            else for (int i = 0; i < lists.spamList.Count; i++)
+                    lists.EditAllAt(i, lists.spamList[i]);
         }
 
         private void ResumeThreads()
@@ -90,9 +108,9 @@ namespace Kihson_s_Spam_Script
 
         private void UpdateTitle()
         {
-            if (Working)
+            if (IsRunning)
             {
-                if (Paused)
+                if (IsPaused)
                 {
                     this.Text = lang[LanguageManager.Names.TitlePaused];
                     buttonPause.Text = lang[LanguageManager.Names.ButtonResume];
@@ -110,45 +128,44 @@ namespace Kihson_s_Spam_Script
             }
         }
 
-        private void UpdateComponents()
+        private void UpdateListBox()
         {
-            if (Working)
+            // Updating list here
+            if (listBoxThreads.Items.Count > 0)
             {
-                // Checking and removing inactive threads here
-                for (int i = 0; i < lists.threadList.Count; i++)
+                for (int i = 0; i < lists.spamList.Count; i++)
                 {
-                    if (!lists.threadList[i].IsAlive)
-                        lists.RemoveAllAt(i);
-                }
-
-                // Updating program state
-                if (lists.threadList.Count == 0)
-                {
-                    buttonPause.Enabled = false;
-                    Working = Paused = false;
-                }
-                else buttonPause.Enabled = true;
-
-                // Updating list here
-                if (listBoxThreads.Items.Count > 0)
-                {
-                    for (int i = 0; i < lists.spamList.Count; i++)
+                    if (lists.spamList[i].NumberMessage != "") //&& Int64.Parse(x.NumberMessage) > 0)
                     {
-                        if (lists.spamList[i].NumberMessage != "") //&& Int64.Parse(x.NumberMessage) > 0)
-                        {
-                            lists.spamList[i].UpdateNumberMessage();
-                            lists.listBox.Items[i] = lists.CreateListBoxString(new SpamAction
-                                (
-                                lists.spamList[i].SpamMessage,
-                                lists.spamList[i].Time.ToString(),
-                                lists.spamList[i].NumberMessage,
-                                lists.spamList[i].Delay.ToString())
-                                );
-                        } 
+                        //lists.spamList[i].UpdateNumberMessage();
+                        lists.listBox.Items[i] = lists.CreateListBoxString(new SpamAction
+                            (
+                            lists.spamList[i].SpamMessage,
+                            lists.spamList[i].Time.ToString(),
+                            lists.spamList[i].Number.ToString(),
+                            lists.spamList[i].Delay.ToString())
+                            );
                     }
                 }
             }
-            else buttonPause.Enabled = false;
+        }
+
+        private void UpdateProgramState()
+        {
+            // Checking and removing inactive threads here
+            for (int i = 0; i < lists.threadList.Count && lists.RemoveFinalised; i++)
+            {
+                if (!lists.threadList[i].IsAlive)
+                    lists.RemoveAllAt(i);
+            }
+
+            // Updating program state
+            if (lists.threadList.Count == 0)
+            {
+                buttonPause.Enabled = false;
+                IsRunning = IsPaused = false;
+            }
+            else buttonPause.Enabled = true;
         }
 
         private void RemoveSelectedInListBox()

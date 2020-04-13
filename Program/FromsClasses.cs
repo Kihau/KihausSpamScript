@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Diagnostics;
 using System.Threading;
 
-namespace Kihson_s_Spam_Script
+namespace KihsonsBot
 {
     public class ListManager
     {
@@ -22,7 +15,8 @@ namespace Kihson_s_Spam_Script
         public ListBox listBox;
         public List<Thread> threadList = new List<Thread>();
         public List<SpamAction> spamList = new List<SpamAction>();
-        //private string LBString { get; set; }
+        
+        public bool RemoveFinalised { get; set; }
 
         public void AddToAll(SpamAction spamAction)
         {
@@ -34,6 +28,7 @@ namespace Kihson_s_Spam_Script
         public void EditAllAt(int index, SpamAction spamAction)
         {
             spamList[index] = spamAction;
+            spamList[index].UpdateNumber();
 
             // destroy previous thread here
             if (threadList[index].IsAlive)
@@ -115,9 +110,19 @@ namespace Kihson_s_Spam_Script
             }
         }
 
-        public void UpdateNumberMessage()
+        public void UpdateNumber()
         {
-            NumberMessage = Number.ToString();
+            Number = int.Parse(NumberMessage);
+        }
+
+        public bool CheckIfDone()
+        {
+            if (NumberMessage != "")
+            {
+                if (Number == 0) return true;
+                else return false;
+            }
+            else return false;
         }
 
         public void SetNewDelay(string newdelay)
@@ -143,7 +148,7 @@ namespace Kihson_s_Spam_Script
             ButtonAdd, ButtonPause, ButtonResume, ButtonEdit, ButtonRemove, ButtonAccept, ButtonCancel,
             LabelMessage, LabelTime, LabelNumber, LabelDelay, LabelThreads,
             LabelNewMessage, LabelNewTime, LabelNewNumber, LabelNewDelay,
-            MenuThreads, MenuOptions, MenuLanguages, MenuMB, MenuMBShow, MenuMBHide, MenuHelp, MenuAbout
+            MenuThreads, MenuSave, MenuLoad, MenuOptions, MenuLanguages, MenuMB, MenuMBShow, MenuMBHide, MenuHelp, MenuAbout
         }
     }
 
@@ -177,10 +182,10 @@ namespace Kihson_s_Spam_Script
             "AKCEPTUJ",
             "ANULUJ",
 
-            "Wiadomość, którą chcesz spamować:",
-            "Częstotliwość wysyłania (w ms):",
-            "Ilość wiadomości do wysłania:",
-            "Opóżnienie:",
+            " Wiadomość, którą chcesz spamować:",
+            "     Częstotliwość wysyłania (w ms):",
+            "       Ilość wiadomości do wysłania:",
+            "  Opóźnienie między wiadomościami:",
             "Dodane wątki:",
 
             "Nowa wiadomość do spamowania:",
@@ -189,6 +194,8 @@ namespace Kihson_s_Spam_Script
             "              Nowe opóźnienie:",
 
             "Wątki",
+            "Zapisz",
+            "Wczytaj",
             "Opcje",
             "Języki",
             "MessageBoxy", "Pokaż", "Ukryj", 
@@ -228,10 +235,10 @@ namespace Kihson_s_Spam_Script
             "ACCEPT",
             "CANCEL",
 
-            "Message you want to be spammed:",
-            "Spamming frequency (in ms):",
-            "Number of messages to send:",
-            "    Delay:",
+            "  Message you want to be spammed:",
+            "      Spamming frequency (in ms):",
+            "      Number of messages to send:",
+            "          Delay between messages:",
             "Listed threads:",
 
             "         New message to spam:",
@@ -240,6 +247,8 @@ namespace Kihson_s_Spam_Script
             "                   New delay:",
 
             "Threads",
+            "Save",
+            "Load",
             "Options",
             "Languages",
             "MessageBoxes", "Show", "Hide",

@@ -1,4 +1,4 @@
-﻿namespace Kihson_s_Spam_Script
+﻿namespace KihsonsBot.SpamScript
 {
     partial class SpamScriptForm
     {
@@ -48,11 +48,11 @@
             this.buttonListRemove = new System.Windows.Forms.Button();
             this.listBoxThreads = new System.Windows.Forms.ListBox();
             this.buttonListEdit = new System.Windows.Forms.Button();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.AutoClickerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ThreadsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.zapiszToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.wczytajToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LoadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LanguagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LangPLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,7 +62,10 @@
             this.MBOffToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.HelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuStrip1.SuspendLayout();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.checkBoxDeleteFinalised = new System.Windows.Forms.CheckBox();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // text_label
@@ -85,7 +88,7 @@
             // time_label
             // 
             this.time_label.AutoSize = true;
-            this.time_label.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.time_label.BackColor = System.Drawing.SystemColors.Control;
             this.time_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.time_label.Location = new System.Drawing.Point(12, 99);
             this.time_label.Name = "time_label";
@@ -102,7 +105,7 @@
             // 
             // buttonStart
             // 
-            this.buttonStart.Location = new System.Drawing.Point(17, 227);
+            this.buttonStart.Location = new System.Drawing.Point(17, 289);
             this.buttonStart.Name = "buttonStart";
             this.buttonStart.Size = new System.Drawing.Size(70, 65);
             this.buttonStart.TabIndex = 4;
@@ -112,7 +115,7 @@
             // 
             // buttonStop
             // 
-            this.buttonStop.Location = new System.Drawing.Point(93, 227);
+            this.buttonStop.Location = new System.Drawing.Point(93, 289);
             this.buttonStop.Name = "buttonStop";
             this.buttonStop.Size = new System.Drawing.Size(69, 65);
             this.buttonStop.TabIndex = 5;
@@ -139,7 +142,7 @@
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(168, 227);
+            this.buttonAdd.Location = new System.Drawing.Point(166, 289);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(69, 65);
             this.buttonAdd.TabIndex = 8;
@@ -150,24 +153,24 @@
             // delay_label
             // 
             this.delay_label.AutoSize = true;
-            this.delay_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.delay_label.Location = new System.Drawing.Point(325, 221);
+            this.delay_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.delay_label.Location = new System.Drawing.Point(12, 225);
             this.delay_label.Name = "delay_label";
-            this.delay_label.Size = new System.Drawing.Size(90, 16);
+            this.delay_label.Size = new System.Drawing.Size(127, 25);
             this.delay_label.TabIndex = 9;
             this.delay_label.Text = "Opóżnienie:";
             // 
             // textBoxSpamDelay
             // 
-            this.textBoxSpamDelay.Location = new System.Drawing.Point(324, 241);
+            this.textBoxSpamDelay.Location = new System.Drawing.Point(17, 253);
             this.textBoxSpamDelay.Name = "textBoxSpamDelay";
-            this.textBoxSpamDelay.Size = new System.Drawing.Size(89, 20);
+            this.textBoxSpamDelay.Size = new System.Drawing.Size(367, 20);
             this.textBoxSpamDelay.TabIndex = 10;
             // 
             // buttonPause
             // 
             this.buttonPause.Enabled = false;
-            this.buttonPause.Location = new System.Drawing.Point(243, 227);
+            this.buttonPause.Location = new System.Drawing.Point(241, 289);
             this.buttonPause.Name = "buttonPause";
             this.buttonPause.Size = new System.Drawing.Size(69, 65);
             this.buttonPause.TabIndex = 11;
@@ -183,7 +186,7 @@
             // 
             this.thread_label.AutoSize = true;
             this.thread_label.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.thread_label.Location = new System.Drawing.Point(319, 265);
+            this.thread_label.Location = new System.Drawing.Point(316, 325);
             this.thread_label.Name = "thread_label";
             this.thread_label.Size = new System.Drawing.Size(106, 16);
             this.thread_label.TabIndex = 12;
@@ -191,18 +194,19 @@
             // 
             // textBoxThreads
             // 
-            this.textBoxThreads.Enabled = false;
             this.textBoxThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.textBoxThreads.Location = new System.Drawing.Point(348, 284);
+            this.textBoxThreads.Location = new System.Drawing.Point(348, 344);
+            this.textBoxThreads.Multiline = true;
             this.textBoxThreads.Name = "textBoxThreads";
-            this.textBoxThreads.Size = new System.Drawing.Size(36, 20);
+            this.textBoxThreads.ReadOnly = true;
+            this.textBoxThreads.Size = new System.Drawing.Size(36, 17);
             this.textBoxThreads.TabIndex = 13;
             this.textBoxThreads.Text = "0";
             this.textBoxThreads.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // buttonListRemove
             // 
-            this.buttonListRemove.Location = new System.Drawing.Point(509, 227);
+            this.buttonListRemove.Location = new System.Drawing.Point(509, 289);
             this.buttonListRemove.Name = "buttonListRemove";
             this.buttonListRemove.Size = new System.Drawing.Size(75, 65);
             this.buttonListRemove.TabIndex = 15;
@@ -214,16 +218,16 @@
             // 
             this.listBoxThreads.FormattingEnabled = true;
             this.listBoxThreads.HorizontalScrollbar = true;
-            this.listBoxThreads.Location = new System.Drawing.Point(400, 38);
+            this.listBoxThreads.Location = new System.Drawing.Point(400, 35);
             this.listBoxThreads.Name = "listBoxThreads";
             this.listBoxThreads.ScrollAlwaysVisible = true;
             this.listBoxThreads.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBoxThreads.Size = new System.Drawing.Size(184, 173);
+            this.listBoxThreads.Size = new System.Drawing.Size(184, 238);
             this.listBoxThreads.TabIndex = 16;
             // 
             // buttonListEdit
             // 
-            this.buttonListEdit.Location = new System.Drawing.Point(428, 227);
+            this.buttonListEdit.Location = new System.Drawing.Point(428, 289);
             this.buttonListEdit.Name = "buttonListEdit";
             this.buttonListEdit.Size = new System.Drawing.Size(75, 65);
             this.buttonListEdit.TabIndex = 17;
@@ -231,19 +235,19 @@
             this.buttonListEdit.UseVisualStyleBackColor = true;
             this.buttonListEdit.Click += new System.EventHandler(this.buttonListEdit_Click);
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.AutoClickerToolStripMenuItem,
             this.ThreadsToolStripMenuItem,
             this.OptionsToolStripMenuItem,
             this.HelpToolStripMenuItem,
             this.AboutToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(603, 24);
-            this.menuStrip1.TabIndex = 18;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(603, 24);
+            this.menuStrip.TabIndex = 18;
+            this.menuStrip.Text = "menuStrip1";
             // 
             // AutoClickerToolStripMenuItem
             // 
@@ -255,23 +259,25 @@
             // ThreadsToolStripMenuItem
             // 
             this.ThreadsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.zapiszToolStripMenuItem,
-            this.wczytajToolStripMenuItem});
+            this.SaveToolStripMenuItem,
+            this.LoadToolStripMenuItem});
             this.ThreadsToolStripMenuItem.Name = "ThreadsToolStripMenuItem";
             this.ThreadsToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
             this.ThreadsToolStripMenuItem.Text = "Wątki";
             // 
-            // zapiszToolStripMenuItem
+            // SaveToolStripMenuItem
             // 
-            this.zapiszToolStripMenuItem.Name = "zapiszToolStripMenuItem";
-            this.zapiszToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-            this.zapiszToolStripMenuItem.Text = "Zapisz";
+            this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
+            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.SaveToolStripMenuItem.Text = "Zapisz";
+            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
             // 
-            // wczytajToolStripMenuItem
+            // LoadToolStripMenuItem
             // 
-            this.wczytajToolStripMenuItem.Name = "wczytajToolStripMenuItem";
-            this.wczytajToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
-            this.wczytajToolStripMenuItem.Text = "Wczytaj";
+            this.LoadToolStripMenuItem.Name = "LoadToolStripMenuItem";
+            this.LoadToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.LoadToolStripMenuItem.Text = "Wczytaj";
+            this.LoadToolStripMenuItem.Click += new System.EventHandler(this.LoadToolStripMenuItem_Click);
             // 
             // OptionsToolStripMenuItem
             // 
@@ -333,18 +339,46 @@
             this.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem";
             this.HelpToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
             this.HelpToolStripMenuItem.Text = "Pomoc";
+            this.HelpToolStripMenuItem.Click += new System.EventHandler(this.HelpToolStripMenuItem_Click);
             // 
             // AboutToolStripMenuItem
             // 
             this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
             this.AboutToolStripMenuItem.Size = new System.Drawing.Size(86, 20);
             this.AboutToolStripMenuItem.Text = "O programie";
+            this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.FileName = "openFileDialog1";
+            this.openFileDialog.Filter = "XML files (*.xml)|*.xml";
+            this.openFileDialog.FilterIndex = 2;
+            this.openFileDialog.Title = "Load";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "XML files (*.xml)|*.xml";
+            this.saveFileDialog.FilterIndex = 2;
+            this.saveFileDialog.Title = "Save";
+            // 
+            // checkBoxDeleteFinalised
+            // 
+            this.checkBoxDeleteFinalised.AutoSize = true;
+            this.checkBoxDeleteFinalised.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.25F, System.Drawing.FontStyle.Bold);
+            this.checkBoxDeleteFinalised.Location = new System.Drawing.Point(316, 286);
+            this.checkBoxDeleteFinalised.Name = "checkBoxDeleteFinalised";
+            this.checkBoxDeleteFinalised.Size = new System.Drawing.Size(112, 36);
+            this.checkBoxDeleteFinalised.TabIndex = 19;
+            this.checkBoxDeleteFinalised.Text = "Czyść po\r\nzakończeniu";
+            this.checkBoxDeleteFinalised.UseVisualStyleBackColor = true;
+            this.checkBoxDeleteFinalised.CheckedChanged += new System.EventHandler(this.checkBoxDeleteFinalised_CheckedChanged);
             // 
             // SpamScriptForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(603, 315);
+            this.ClientSize = new System.Drawing.Size(603, 375);
+            this.Controls.Add(this.checkBoxDeleteFinalised);
             this.Controls.Add(this.buttonListEdit);
             this.Controls.Add(this.listBoxThreads);
             this.Controls.Add(this.buttonListRemove);
@@ -362,15 +396,15 @@
             this.Controls.Add(this.time_label);
             this.Controls.Add(this.textBoxSpamMessage);
             this.Controls.Add(this.text_label);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "SpamScriptForm";
             this.Text = "Kihau\'s Spam Script - BOT NIEAKTYWNY";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -380,7 +414,6 @@
 
         private System.Windows.Forms.Label text_label;
         private System.Windows.Forms.TextBox textBoxSpamMessage;
-        private System.Windows.Forms.Label time_label;
         private System.Windows.Forms.TextBox textBoxSpamTime;
         private System.Windows.Forms.Button buttonStart;
         private System.Windows.Forms.Button buttonStop;
@@ -396,7 +429,7 @@
         private System.Windows.Forms.Button buttonListRemove;
         private System.Windows.Forms.ListBox listBoxThreads;
         private System.Windows.Forms.Button buttonListEdit;
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem AutoClickerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem OptionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem LanguagesToolStripMenuItem;
@@ -408,8 +441,12 @@
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem HelpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ThreadsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem zapiszToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem wczytajToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem SaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LoadToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.CheckBox checkBoxDeleteFinalised;
+        private System.Windows.Forms.Label time_label;
     }
 }
 

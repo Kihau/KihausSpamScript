@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Kihson_s_Spam_Script
+namespace KihsonsBot.SpamScript
 {
     public partial class ListBoxEditorForm : Form
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Kihson_s_Spam_Script
+namespace KihsonsBot
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace Kihson_s_Spam_Script
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SpamScriptForm());
+            Application.Run(new SpamScript.SpamScriptForm());
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace Kihson_s_Spam_Script
+﻿namespace KihsonsBot.SpamScript
 {
     partial class ListBoxEditorForm
     {
